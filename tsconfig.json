@@ -4,7 +4,11 @@
     "module": "commonjs",
     "strict": true,
     "declaration": true,
-    "outDir": "./build"
+    "emitDeclarationOnly": true,
+    "outFile": "./build/index.d.ts"
   },
+  "files": [
+    "src/h.ts"
+  ],
   "exclude": ["test", "dist", "node_modules"]
 }

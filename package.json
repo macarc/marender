@@ -5,7 +5,8 @@
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "scripts": {
-    "build": "rm build/*; tsc",
+    "build": "esbuild src/h.ts --bundle --platform=node --outfile=build/index.js",
+    "type": "tsc",
     "fmt": "prettier --write .",
     "test": "jest"
   },
