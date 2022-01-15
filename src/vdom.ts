@@ -118,9 +118,8 @@ export function patch(before: V, after: V): boolean {
         }
       } else if (isVElement(bef) && isVElement(aft)) {
         const isNewNode = patch(bef, aft);
-        if (isNewNode && aft.node && bef.node) {
+        if (isNewNode && aft.node && bef.node)
           after.node.replaceChild(aft.node, bef.node);
-        }
       } else if (isVString(aft)) {
         aft.node = document.createTextNode(aft.s);
         after.node.replaceChild(aft.node, oldNode);
