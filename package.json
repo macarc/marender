@@ -1,0 +1,16 @@
+{
+  "name": "marender",
+  "version": "0.8.0",
+  "description": "A simple and stupid VDOM implementation.",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "macarc",
+  "license": "GPL-3.0",
+  "devDependencies": {
+    "typescript": "^4.5.4"
+  }
+}
