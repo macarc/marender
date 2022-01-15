@@ -5,7 +5,7 @@
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "scripts": {
-    "build": "esbuild src/index.ts --bundle --platform=node --outfile=build/index.js",
+    "build": "esbuild src/index.ts --bundle --platform=node --outfile=build/index.js; cp src/index.d.ts build",
     "type": "tsc",
     "fmt": "prettier --write .",
     "test": "jest"
