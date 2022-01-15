@@ -1,16 +1,20 @@
 {
   "name": "marender",
   "version": "0.8.0",
-  "description": "A simple and stupid VDOM implementation.",
+  "description": "A simple and stupid (but mostly stupid) VDOM implementation.",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "fmt": "prettier --write .",
+    "test": "jest"
   },
   "author": "macarc",
   "license": "GPL-3.0",
   "devDependencies": {
+    "@types/jest": "^27.4.0",
+    "jest": "^27.4.7",
+    "prettier": "^2.5.1",
     "typescript": "^4.5.4"
   }
 }

@@ -2,7 +2,7 @@
    Virtual DOM implementation - still needs work
    Copyright (C) 2021 macarc
  */
-import { VElement, VString, AnyV } from './types';
+import { VElement, VString, AnyV } from "./types";
 
 const isVString = (a: AnyV): a is VString => (a as VString).s !== undefined;
 const isVElement = (a: AnyV): a is VElement =>
@@ -19,7 +19,7 @@ function patchNew(v: VElement, topLevel = false): Element {
   }
 
   for (const attr in v.attrs) {
-    if (typeof v.attrs[attr] === 'boolean') {
+    if (typeof v.attrs[attr] === "boolean") {
       if (v.attrs[attr])
         newElement.setAttribute(attr, v.attrs[attr].toString());
     } else {
@@ -59,7 +59,6 @@ function patchNew(v: VElement, topLevel = false): Element {
 // Compares both virtual DOM and efficiently updates the real DOM (actual DOM mutation is slow)
 // Returns true if after.node !== before.node (i.e. the node needs to be replaced)
 export function patch(before: VElement, after: VElement): boolean {
-
   if (
     before.node === null ||
     before.name.toLowerCase() !== after.name.toLowerCase()
@@ -76,7 +75,7 @@ export function patch(before: VElement, after: VElement): boolean {
         after.attrs[attr] === false
       ) {
         before.node.removeAttribute(attr);
-      } else if (typeof after.attrs[attr] === 'boolean') {
+      } else if (typeof after.attrs[attr] === "boolean") {
         before.node.setAttribute(attr, after.attrs[attr].toString());
       } else {
         before.node.setAttribute(attr, after.attrs[attr].toString());

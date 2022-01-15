@@ -6,16 +6,15 @@ A stupid and simple virtual dom implementation. It's still quite rough around th
 
 `h` and `svg` create virtual HTML elements and SVG elements respectively. They are overloaded with the following options:
 
-
-* `h(name: string): VElement;`
-* `h(name: string, children: Child[]): VElement;`
-* `h(name: string, attrs: Attributes): VElement;`
-* `h(name: string, attrs: Attributes, children: Child[]): VElement;`
-* `h(name: string, attrs: Attributes, events: Events): VElement;`
+- `h(name: string): VElement;`
+- `h(name: string, children: Child[]): VElement;`
+- `h(name: string, attrs: Attributes): VElement;`
+- `h(name: string, attrs: Attributes, children: Child[]): VElement;`
+- `h(name: string, attrs: Attributes, events: Events): VElement;`
 
 To turn an empty element on the page to a virtual DOM element use `hFrom`:
 
-`hFrom(element: string | HTMLElement): V` 
+`hFrom(element: string | HTMLElement): V`
 
 If a string is passed, it is used as an ID.
 
@@ -28,23 +27,23 @@ You an only patch elements that are the same type of element (i.e. have the same
 ## Example Usage
 
 ```typescript
-import { h, hFrom, patch } from 'render/h';
+import { h, hFrom, patch } from "render/h";
 
-const root = hFrom('some-empty-div-id');
+const root = hFrom("some-empty-div-id");
 const vdom = h(
-  'div',
-  { style: 'font-size: 1rem' },
-  { click: () => alert('hi') },
-  [h('p', ['some text'])]
+  "div",
+  { style: "font-size: 1rem" },
+  { click: () => alert("hi") },
+  [h("p", ["some text"])]
 );
 
 patch(root, vdom);
 
 const newVdom = h(
-  'div',
-  { style: 'font-size: 1.1rem' },
-  { click: () => alert('hi') },
-  [h('p', { style: 'color: red' }, ['updated text'])]
+  "div",
+  { style: "font-size: 1.1rem" },
+  { click: () => alert("hi") },
+  [h("p", { style: "color: red" }, ["updated text"])]
 );
 patch(vdom, newVdom);
 ```

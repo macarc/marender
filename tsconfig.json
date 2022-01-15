@@ -6,9 +6,5 @@
     "declaration": true,
     "outDir": "./build"
   },
-  "exclude": [
-    "test",
-    "dist",
-    "node_modules"
-  ]
+  "exclude": ["test", "dist", "node_modules"]
 }

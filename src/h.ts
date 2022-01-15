@@ -2,7 +2,7 @@
    Virtual DOM API
    Copyright (C) 2021 macarc
  */
-import { V, VElement, Attributes, Events } from './types';
+import { V, VElement, Attributes, Events } from "./types";
 
 type Child = VElement | string | null;
 
@@ -24,9 +24,8 @@ function h(
   b: Events | Child[] = {},
   c: Child[] = []
 ): VElement {
-
   const childrenOf = (children: Child[]) =>
-    children.map((s) => (typeof s === 'string' ? { s, node: null } : s));
+    children.map((s) => (typeof s === "string" ? { s, node: null } : s));
   if (Array.isArray(a)) {
     return { name, attrs: {}, events: {}, children: childrenOf(a), node: null };
   } else {
@@ -64,9 +63,9 @@ function svg(
   c: Child[] = []
 ): VElement {
   if (Array.isArray(a)) {
-    return h(name, { ns: 'http://www.w3.org/2000/svg' }, {}, a);
+    return h(name, { ns: "http://www.w3.org/2000/svg" }, {}, a);
   } else {
-    a.ns = 'http://www.w3.org/2000/svg';
+    a.ns = "http://www.w3.org/2000/svg";
     if (Array.isArray(b)) {
       return h(name, a, {}, b);
     } else {
@@ -79,11 +78,11 @@ function svg(
 // If a string is passed, uses that as an id
 export function hFrom(element: string | HTMLElement): V {
   const el =
-    typeof element === 'string' ? document.getElementById(element) : element;
-  if (!el) return h('div');
+    typeof element === "string" ? document.getElementById(element) : element;
+  if (!el) return h("div");
 
   return { name: el.tagName, attrs: {}, events: {}, children: [], node: el };
 }
 
 export { V, h, svg, Attributes };
-export { patch } from './vdom'
+export { patch } from "./vdom";
