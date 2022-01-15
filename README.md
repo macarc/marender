@@ -4,7 +4,7 @@ A simple and stupid virtual dom implementation. It's still quite rough around th
 
 ## Features
 
-- Simple - 186 loc, but all the work is done in `src/vdom.ts` which is 110 loc. 4 public functions.
+- Simple - 186 loc, but all the work is done in `src/patch.ts` which is 110 loc. 4 public functions.
 - Stupid - I have no idea how virtual DOM works! I just made it up :P It has worked just fine for [my use case](https://github.com/macarc/PipeScore)
 - No dependencies
 
