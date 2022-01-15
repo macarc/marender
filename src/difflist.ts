@@ -1,5 +1,6 @@
 /*
-   The beginning of a more efficient list render for PipeScore
+   The beginning of a more efficient list render.
+   Currently unused
    Copyright (C) 2021 macarc
  */
 const enum Change {
