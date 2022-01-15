@@ -1,6 +1,6 @@
 /*
-   Virtual DOM implementation - still needs work
-   Copyright (C) 2021 macarc
+   Patch implementation
+   Copyright (C) 2021-2022 macarc
  */
 import { V, VString } from "./types";
 

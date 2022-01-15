@@ -1,4 +1,7 @@
-// Marender API
+/*
+   Marender API
+   Copyright (C) 2022 macarc
+ */
 
 // Types
 

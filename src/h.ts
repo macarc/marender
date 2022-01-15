@@ -1,6 +1,6 @@
 /*
-   Virtual DOM API
-   Copyright (C) 2021 macarc
+   Helpers for creating virtual DOM elements
+   Copyright (C) 2021-2022 macarc
  */
 import { V, Attributes, Events } from "./types";
 

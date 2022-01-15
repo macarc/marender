@@ -1,5 +1,5 @@
 /*
-   Copyright (C) 2021 macarc
+   Copyright (C) 2021-2022 macarc
  */
 export interface Attributes {
   [attr: string]: string | number | boolean;
