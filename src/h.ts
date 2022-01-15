@@ -2,76 +2,62 @@
    Virtual DOM API
    Copyright (C) 2021 macarc
  */
-import { V, VElement, Attributes, Events } from "./types";
+import { V, Attributes, Events } from "./types";
+import { patch } from "./vdom";
 
-type Child = VElement | string | null;
+type Child = V | string | null;
+
+const toV = (children: Child[]) =>
+  children.map((s) => (typeof s === "string" ? { s, node: null } : s));
 
 // Creates a virtual DOM node
-function h(name: string): VElement;
-function h(name: string, children: Child[]): VElement;
-function h(name: string, attrs: Attributes): VElement;
-function h(name: string, attrs: Attributes, children: Child[]): VElement;
-function h(name: string, attrs: Attributes, events: Events): VElement;
+function h(name: string): V;
+function h(name: string, children: Child[]): V;
+function h(name: string, attrs: Attributes): V;
+function h(name: string, attrs: Attributes, children: Child[]): V;
+function h(name: string, attrs: Attributes, events: Events): V;
 function h(
   name: string,
   attrs: Attributes,
   events: Events,
   children: Child[]
-): VElement;
+): V;
 function h(
   name: string,
   a: Attributes | Child[] = {},
   b: Events | Child[] = {},
   c: Child[] = []
-): VElement {
-  const childrenOf = (children: Child[]) =>
-    children.map((s) => (typeof s === "string" ? { s, node: null } : s));
-  if (Array.isArray(a)) {
-    return { name, attrs: {}, events: {}, children: childrenOf(a), node: null };
-  } else {
-    if (Array.isArray(b)) {
-      return {
-        name,
-        attrs: a,
-        events: {},
-        children: childrenOf(b),
-        node: null,
-      };
-    } else {
-      return { name, attrs: a, events: b, children: childrenOf(c), node: null };
-    }
-  }
+): V {
+  if (Array.isArray(a))
+    return { name, attrs: {}, events: {}, children: toV(a), node: null };
+
+  return Array.isArray(b)
+    ? { name, attrs: a, events: {}, children: toV(b), node: null }
+    : { name, attrs: a, events: b, children: toV(c), node: null };
 }
 
 // Creates a virtual DOM node that is an SVG element
-function svg(name: string): VElement;
-function svg(name: string, children: Child[]): VElement;
-function svg(name: string, attrs: Attributes): VElement;
-function svg(name: string, attrs: Attributes, children: Child[]): VElement;
-function svg(name: string, attrs: Attributes, events: Events): VElement;
+function svg(name: string): V;
+function svg(name: string, children: Child[]): V;
+function svg(name: string, attrs: Attributes): V;
+function svg(name: string, attrs: Attributes, children: Child[]): V;
+function svg(name: string, attrs: Attributes, events: Events): V;
 function svg(
   name: string,
   attrs: Attributes,
   events: Events,
   children: Child[]
-): VElement;
-
+): V;
 function svg(
   name: string,
   a: Attributes | Child[] = {},
   b: Events | Child[] = {},
   c: Child[] = []
-): VElement {
-  if (Array.isArray(a)) {
-    return h(name, { ns: "http://www.w3.org/2000/svg" }, {}, a);
-  } else {
-    a.ns = "http://www.w3.org/2000/svg";
-    if (Array.isArray(b)) {
-      return h(name, a, {}, b);
-    } else {
-      return h(name, a, b, c);
-    }
-  }
+): V {
+  if (Array.isArray(a)) return h(name, { ns: "http://www.w3.org/2000/svg" }, a);
+
+  a.ns = "http://www.w3.org/2000/svg";
+  return Array.isArray(b) ? h(name, a, b) : h(name, a, b, c);
 }
 
 // Converts an empty element to a virtual DOM element
@@ -79,10 +65,10 @@ function svg(
 export function hFrom(element: string | HTMLElement): V {
   const el =
     typeof element === "string" ? document.getElementById(element) : element;
-  if (!el) return h("div");
+
+  if (!el) throw new Error("Passed an invalid id to marender:hFrom");
 
   return { name: el.tagName, attrs: {}, events: {}, children: [], node: el };
 }
 
-export { V, h, svg, Attributes };
-export { patch } from "./vdom";
+export { V, h, svg, Attributes, Events, Child, patch };

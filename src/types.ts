@@ -9,11 +9,11 @@ export interface Events {
   [event: string]: (e: Event) => void;
 }
 
-export interface VElement {
+export interface V {
   name: string;
   attrs: Attributes;
   events: Events;
-  children: (AnyV | null)[];
+  children: (V | VString | null)[];
   node: Element | null;
 }
 
@@ -21,7 +21,3 @@ export interface VString {
   s: string;
   node: Node | null;
 }
-
-export type AnyV = VElement | VString;
-
-export type V = VElement;

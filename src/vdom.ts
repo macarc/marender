@@ -2,27 +2,26 @@
    Virtual DOM implementation - still needs work
    Copyright (C) 2021 macarc
  */
-import { VElement, VString, AnyV } from "./types";
+import { V, VString } from "./types";
 
-const isVString = (a: AnyV): a is VString => (a as VString).s !== undefined;
-const isVElement = (a: AnyV): a is VElement =>
-  (a as VElement).name !== undefined;
+const isVString = (a: V | VString): a is VString => (a as VString).s !== undefined;
+const isVElement = (a: V | VString): a is V =>
+  (a as V).name !== undefined;
+
+function unreachable(): never {
+  throw new Error("marender: Unreachable");
+}
 
 // Create a new element from a virtual node
 // Uses DocumentFragment for good-ish performance
-function patchNew(v: VElement, topLevel = false): Element {
-  let newElement: Element;
-  if (v.attrs.ns) {
-    newElement = document.createElementNS(v.attrs.ns.toString(), v.name);
-  } else {
-    newElement = document.createElement(v.name);
-  }
+function patchNew(v: V, topLevel = true): Element {
+  const newElement = v.attrs.ns
+    ? document.createElementNS(v.attrs.ns.toString(), v.name)
+    : document.createElement(v.name);
 
   for (const attr in v.attrs) {
-    if (typeof v.attrs[attr] === "boolean") {
-      if (v.attrs[attr])
-        newElement.setAttribute(attr, v.attrs[attr].toString());
-    } else {
+    const isFalse = typeof v.attrs[attr] === "boolean" && !v.attrs[attr];
+    if (!isFalse) {
       newElement.setAttribute(attr, v.attrs[attr].toString());
     }
   }
@@ -30,43 +29,37 @@ function patchNew(v: VElement, topLevel = false): Element {
     newElement.addEventListener(event, v.events[event]);
   }
 
-  let parent: DocumentFragment | Element;
-  if (topLevel) {
-    parent = new DocumentFragment();
-  } else {
-    parent = newElement;
-  }
-  for (const child in v.children) {
-    const aft = v.children[child];
-    if (aft === null || aft === undefined) continue;
+  const parent = topLevel ? new DocumentFragment() : newElement;
 
-    if (isVString(aft)) {
-      const d = document.createTextNode(aft.s);
+  for (const child of v.children) {
+    if (child === null) continue;
+
+    if (isVString(child)) {
+      const d = document.createTextNode(child.s);
       parent.appendChild(d);
-      aft.node = d;
+      child.node = d;
     } else {
-      const d = patchNew(aft);
+      const d = patchNew(child, false);
       parent.appendChild(d);
     }
   }
-  if (topLevel) {
-    newElement.appendChild(parent);
-  }
+  if (topLevel) newElement.appendChild(parent);
   v.node = newElement;
   return newElement;
 }
 // Patches after onto before
 // Compares both virtual DOM and efficiently updates the real DOM (actual DOM mutation is slow)
 // Returns true if after.node !== before.node (i.e. the node needs to be replaced)
-export function patch(before: VElement, after: VElement): boolean {
+export function patch(before: V, after: V): boolean {
   if (
     before.node === null ||
     before.name.toLowerCase() !== after.name.toLowerCase()
   ) {
-    patchNew(after, true);
+    patchNew(after);
     return true;
   }
   after.node = before.node;
+
   for (const attr in { ...before.attrs, ...after.attrs }) {
     if (before.attrs[attr] !== after.attrs[attr]) {
       if (
@@ -75,8 +68,6 @@ export function patch(before: VElement, after: VElement): boolean {
         after.attrs[attr] === false
       ) {
         before.node.removeAttribute(attr);
-      } else if (typeof after.attrs[attr] === "boolean") {
-        before.node.setAttribute(attr, after.attrs[attr].toString());
       } else {
         before.node.setAttribute(attr, after.attrs[attr].toString());
       }
@@ -88,59 +79,40 @@ export function patch(before: VElement, after: VElement): boolean {
       after.node.addEventListener(event, after.events[event]);
     }
   }
-  const notNull = <A>(a: A | null): a is A => a !== null;
 
-  before.children = before.children.filter(notNull);
-  after.children = after.children.filter(notNull);
+  after.children = after.children.filter((a) => a !== null);
 
-  // todo this could probably be more efficient
   const childrenDiffLength = before.children.length - after.children.length;
-  for (let i = 0; i < childrenDiffLength; i++) {
+  for (let i = 0; i < childrenDiffLength; i++)
     before.node.removeChild(
       before.node.childNodes[before.node.childNodes.length - 1]
     );
-  }
-  let reachedEndOfBeforeChildren = false;
-  const beforeChildrenLength = before.children.length;
+
   for (let child = 0; child < after.children.length; child++) {
     const aft = after.children[child];
     const bef = before.children[child] || null;
     const oldNode: Node | null = bef && bef.node;
 
-    reachedEndOfBeforeChildren = child >= beforeChildrenLength;
-    if (aft === null || aft === undefined) {
-      if (bef && oldNode) {
-        after.node.removeChild(oldNode);
-      }
-    } else if (bef === null && !reachedEndOfBeforeChildren) {
+    if (aft === null) {
+      // Child needs to be removed
+      if (bef && oldNode) after.node.removeChild(oldNode);
+    } else if (!bef || !oldNode || child >= before.children.length) {
+      // Child needs to be added
       if (isVElement(aft)) {
-        const newElement = patchNew(aft, true);
         after.node.insertBefore(
-          newElement,
+          patchNew(aft),
           before.node.children[child] || null
         );
-        aft.node = newElement;
       } else if (isVString(aft)) {
-        const newElement = document.createTextNode(aft.s);
-        after.node.insertBefore(
-          newElement,
-          before.node.children[child] || null
-        );
-        aft.node = newElement;
-      }
-    } else if (!bef || !oldNode || reachedEndOfBeforeChildren) {
-      if (isVElement(aft)) {
-        const newElement = patchNew(aft, true);
-        after.node.appendChild(newElement);
-        aft.node = newElement;
-      } else if (isVString(aft)) {
-        const d = document.createTextNode(aft.s);
-        after.node.appendChild(d);
-        aft.node = d;
+        aft.node = document.createTextNode(aft.s);
+        after.node.insertBefore(aft.node, before.node.children[child] || null);
+      } else {
+        unreachable();
       }
     } else {
-      if (isVString(bef) || isVString(aft)) {
-        if (aft !== bef && isVString(aft)) {
+      // Child needs to be changed
+      if (isVString(bef) && isVString(aft)) {
+        if (aft !== bef) {
           oldNode.nodeValue = aft.s;
           aft.node = oldNode;
         }
@@ -149,8 +121,13 @@ export function patch(before: VElement, after: VElement): boolean {
         if (isNewNode && aft.node && bef.node) {
           after.node.replaceChild(aft.node, bef.node);
         }
+      } else if (isVString(aft)) {
+        aft.node = document.createTextNode(aft.s);
+        after.node.replaceChild(aft.node, oldNode);
+      } else if (isVString(bef)) {
+        after.node.replaceChild(patchNew(aft), oldNode);
       } else {
-        throw Error("can't deal with different things right now");
+        unreachable();
       }
     }
   }

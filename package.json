@@ -5,7 +5,7 @@
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "scripts": {
-    "build": "tsc",
+    "build": "rm build/*; tsc",
     "fmt": "prettier --write .",
     "test": "jest"
   },
@@ -13,6 +13,8 @@
   "license": "GPL-3.0",
   "devDependencies": {
     "@types/jest": "^27.4.0",
+    "esbuild": "^0.14.11",
+    "esbuild-jest": "^0.5.0",
     "jest": "^27.4.7",
     "prettier": "^2.5.1",
     "typescript": "^4.5.4"
