@@ -31,6 +31,8 @@ function patchNew(v: V, topLevel = true): Element {
 
   const parent = topLevel ? new DocumentFragment() : newElement;
 
+  v.children = v.children.filter((a) => a !== null);
+
   for (const child of v.children) {
     if (child === null) continue;
 
@@ -118,8 +120,7 @@ export function patch(before: V, after: V): boolean {
         }
       } else if (isVElement(bef) && isVElement(aft)) {
         const isNewNode = patch(bef, aft);
-        if (isNewNode && aft.node && bef.node)
-          after.node.replaceChild(aft.node, bef.node);
+        if (isNewNode && aft.node) after.node.replaceChild(aft.node, oldNode);
       } else if (isVString(aft)) {
         aft.node = document.createTextNode(aft.s);
         after.node.replaceChild(aft.node, oldNode);

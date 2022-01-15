@@ -1,10 +1,11 @@
 {
   "name": "marender",
-  "version": "0.8.1",
+  "version": "0.8.3",
   "description": "A simple and stupid (but mostly stupid) VDOM implementation.",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "scripts": {
+    "cloc": "cloc --by-file src/h.ts src/vdom.ts src/index.ts src/types.ts",
     "build": "esbuild src/index.ts --bundle --platform=node --outfile=build/index.js; cp src/index.d.ts build",
     "type": "tsc",
     "fmt": "prettier --write .",
