@@ -85,25 +85,7 @@ describe("marender", () => {
     expect(e.node.innerHTML).toBe("<p>There</p>");
   });
 
-  test("boolean attributes", () => {
-    const e = el();
-    const one = h("div", [h("div", { attr: false })]);
-    const two = h("div", [h("div", { attr: true })]);
-    const three = h("div", [h("div", { attr: false })]);
-
-    patch(e, one);
-    expect((e.node.firstChild as HTMLElement).getAttribute("attr")).toBe(null);
-
-    patch(one, two);
-    expect((e.node.firstChild as HTMLElement).getAttribute("attr")).toBe(
-      "true"
-    );
-
-    patch(two, three);
-    expect((e.node.firstChild as HTMLElement).getAttribute("attr")).toBe(null);
-  });
-
-  test("null children work", () => {
+  test("null children", () => {
     const e = el();
     const one = h("div", [null]);
     const two = h("div", [null, h("p")]);
@@ -117,5 +99,59 @@ describe("marender", () => {
 
     patch(two, three);
     expect(e.node.children.length === 1);
+  });
+
+  test("adding / deleting attributes", () => {
+    const e = el();
+    const one = h("div", [h("div", { attr: "hello" })]);
+    const two = h("div", [h("div", { attr: "world" })]);
+    const three = h("div", [h("div")]);
+
+    patch(e, one);
+    expect(e.node.children[0].getAttribute("attr")).toBe("hello");
+
+    patch(one, two);
+    expect(e.node.children[0].getAttribute("attr")).toBe("world");
+
+    patch(two, three);
+    expect(e.node.children[0].hasAttribute("attr")).toBe(false);
+  });
+
+  test("boolean attributes", () => {
+    const e = el();
+    const one = h("div", [h("div", { attr: false })]);
+    const two = h("div", [h("div", { attr: true })]);
+    const three = h("div", [h("div", { attr: false })]);
+
+    patch(e, one);
+    expect(e.node.children[0].hasAttribute("attr")).toBe(false);
+
+    patch(one, two);
+    expect(e.node.children[0].hasAttribute("attr")).toBe(true);
+
+    patch(two, three);
+    expect(e.node.children[0].hasAttribute("attr")).toBe(false);
+  });
+
+  test("adding / deleting event listeners", () => {
+    const eventListener1 = jest.fn();
+    const eventListener2 = jest.fn();
+    const e = el();
+    const one = h("div", [h("div", {}, { click: eventListener1 })]);
+    const two = h("div", [h("div", {}, { click: eventListener1 })]);
+    const three = h("div", [h("div", {}, { click: eventListener2 })]);
+
+    patch(e, one);
+    (e.node.children[0] as HTMLElement).click();
+    expect(eventListener1).toHaveBeenCalled();
+
+    patch(one, two);
+    (e.node.children[0] as HTMLElement).click();
+    expect(eventListener1).toHaveBeenCalledTimes(2);
+
+    patch(two, three);
+    (e.node.children[0] as HTMLElement).click();
+    expect(eventListener2).toHaveBeenCalled();
+    expect(eventListener1).toHaveBeenCalledTimes(2);
   });
 });

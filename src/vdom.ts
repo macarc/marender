@@ -4,9 +4,9 @@
  */
 import { V, VString } from "./types";
 
-const isVString = (a: V | VString): a is VString => (a as VString).s !== undefined;
-const isVElement = (a: V | VString): a is V =>
-  (a as V).name !== undefined;
+const isVString = (a: V | VString): a is VString =>
+  (a as VString).s !== undefined;
+const isVElement = (a: V | VString): a is V => (a as V).name !== undefined;
 
 function unreachable(): never {
   throw new Error("marender: Unreachable");

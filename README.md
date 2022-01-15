@@ -1,6 +1,6 @@
 # Render
 
-A stupid and simple virtual dom implementation. It's still quite rough around the edges and there are cases I haven't handled yet, as they haven't come up yet.
+A simple and stupid virtual dom implementation. It's still quite rough around the edges.
 
 ## API
 
