@@ -62,7 +62,7 @@ function svg(
 
 // Converts an empty element to a virtual DOM element
 // If a string is passed, uses that as an id
-export function hFrom(element: string | HTMLElement): V {
+function hFrom(element: string | HTMLElement): V {
   const el =
     typeof element === "string" ? document.getElementById(element) : element;
 
@@ -71,4 +71,7 @@ export function hFrom(element: string | HTMLElement): V {
   return { name: el.tagName, attrs: {}, events: {}, children: [], node: el };
 }
 
-export { V, h, svg, Attributes, Events, Child, patch };
+// Functions
+export { h, hFrom, patch, svg };
+// Types
+export { Attributes, Child, Events, V };
