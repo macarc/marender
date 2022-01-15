@@ -8,10 +8,9 @@ const isVString = (a: AnyV): a is VString => (a as VString).s !== undefined;
 const isVElement = (a: AnyV): a is VElement =>
   (a as VElement).name !== undefined;
 
+// Create a new element from a virtual node
+// Uses DocumentFragment for good-ish performance
 function patchNew(v: VElement, topLevel = false): Element {
-  // Create a new element from a virtual node
-  // Uses DocumentFragment for good-ish performance
-
   let newElement: Element;
   if (v.attrs.ns) {
     newElement = document.createElementNS(v.attrs.ns.toString(), v.name);
@@ -56,10 +55,10 @@ function patchNew(v: VElement, topLevel = false): Element {
   v.node = newElement;
   return newElement;
 }
-export default function patch(before: VElement, after: VElement): boolean {
-  // Patches after onto before
-  // Compares both virtual DOM and efficiently updates the real DOM (actual DOM mutation is slow)
-  // Returns true if after.node !== before.node (i.e. the node needs to be replaced)
+// Patches after onto before
+// Compares both virtual DOM and efficiently updates the real DOM (actual DOM mutation is slow)
+// Returns true if after.node !== before.node (i.e. the node needs to be replaced)
+export function patch(before: VElement, after: VElement): boolean {
 
   if (
     before.node === null ||

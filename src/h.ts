@@ -6,6 +6,7 @@ import { V, VElement, Attributes, Events } from './types';
 
 type Child = VElement | string | null;
 
+// Creates a virtual DOM node
 function h(name: string): VElement;
 function h(name: string, children: Child[]): VElement;
 function h(name: string, attrs: Attributes): VElement;
@@ -17,14 +18,12 @@ function h(
   events: Events,
   children: Child[]
 ): VElement;
-
 function h(
   name: string,
   a: Attributes | Child[] = {},
   b: Events | Child[] = {},
   c: Child[] = []
 ): VElement {
-  // Creates a virtual DOM node
 
   const childrenOf = (children: Child[]) =>
     children.map((s) => (typeof s === 'string' ? { s, node: null } : s));
@@ -45,6 +44,7 @@ function h(
   }
 }
 
+// Creates a virtual DOM node that is an SVG element
 function svg(name: string): VElement;
 function svg(name: string, children: Child[]): VElement;
 function svg(name: string, attrs: Attributes): VElement;
@@ -63,8 +63,6 @@ function svg(
   b: Events | Child[] = {},
   c: Child[] = []
 ): VElement {
-  // Creates a virtual DOM node that is an SVG element
-
   if (Array.isArray(a)) {
     return h(name, { ns: 'http://www.w3.org/2000/svg' }, {}, a);
   } else {
@@ -77,10 +75,9 @@ function svg(
   }
 }
 
+// Converts an empty element to a virtual DOM element
+// If a string is passed, uses that as an id
 export function hFrom(element: string | HTMLElement): V {
-  // Converts an empty element to a virtual DOM element
-  // If a string is passed, uses that as an id
-
   const el =
     typeof element === 'string' ? document.getElementById(element) : element;
   if (!el) return h('div');
@@ -89,3 +86,4 @@ export function hFrom(element: string | HTMLElement): V {
 }
 
 export { V, h, svg, Attributes };
+export { patch } from './vdom'
