@@ -4,7 +4,7 @@ A simple and stupid virtual dom implementation. It's still quite rough around th
 
 ## Features
 
-- Simple - 268 loc, but all the work is done in `src/vdom.ts` which is 110 loc
+- Simple - 268 loc, but all the work is done in `src/vdom.ts` which is 110 loc. 4 public functions.
 - Stupid - I have no idea how virtual DOM works! I just made it up :P It has worked just fine for [my use case](https://github.com/macarc/PipeScore)
 
 ### What is virtual DOM?
@@ -31,17 +31,17 @@ Create a virtual DOM element.
 
 - `hFrom(element: string | HTMLElement): V`
 
-Takes an empty HTML element, or an ID for an empty element in the document, and creates a virtual DOM element from it. A non-empty element results in undefined behaviour :)
+From an empty HTML element, or an ID for an empty element in the document, create a virtual DOM element. A non-empty element results in undefined behaviour :)
 
 #### patch
 
 - `patch(before: V, after: V)`
 
-Updates the DOM. You may only patch elements that are the same type of element (i.e. have the same tag name).
+Update the DOM. You may only patch elements that are the same type of element (i.e. that have the same tag name).
 
 #### svg
 
-Same api as `h`. Creates a virtual DOM SVG element.
+Same api as `h`. Create a virtual DOM SVG element.
 
 ### Types
 
@@ -79,8 +79,8 @@ A virtual DOM element.
 
 ## Example Usage
 
-```typescript
-import { h, hFrom, patch } from "render/h";
+```ts
+import { h, hFrom, patch } from "marender";
 
 const root = hFrom("some-empty-div-id");
 const vdom = h(
