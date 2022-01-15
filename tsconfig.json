@@ -1,14 +1,7 @@
 {
   "compilerOptions": {
-    "target": "esnext",
     "module": "commonjs",
     "strict": true,
-    "declaration": true,
-    "emitDeclarationOnly": true,
-    "outFile": "./build/index.d.ts"
-  },
-  "files": [
-    "src/h.ts"
-  ],
-  "exclude": ["test", "dist", "node_modules"]
+    "noEmit": true
+  }
 }

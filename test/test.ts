@@ -1,4 +1,4 @@
-import { h, hFrom, patch } from "../src/h";
+import { h, hFrom, patch } from "../src/index";
 
 describe("marender", () => {
   const el = () => hFrom(document.createElement("div"));
@@ -15,10 +15,10 @@ describe("marender", () => {
     const two = goodbye();
 
     patch(e, one);
-    expect(e.node.innerHTML).toBe("Hello");
+    expect(e.node?.innerHTML).toBe("Hello");
 
     patch(one, two);
-    expect(e.node.innerHTML).toBe("Goodbye");
+    expect(e.node?.innerHTML).toBe("Goodbye");
   });
 
   test("el -> el", () => {
@@ -27,10 +27,10 @@ describe("marender", () => {
     const two = goodbyeStrong();
 
     patch(e, one);
-    expect(e.node.innerHTML).toBe("<em>Hello</em>");
+    expect(e.node?.innerHTML).toBe("<em>Hello</em>");
 
     patch(one, two);
-    expect(e.node.innerHTML).toBe("<strong>Goodbye</strong>");
+    expect(e.node?.innerHTML).toBe("<strong>Goodbye</strong>");
   });
 
   test("string -> el", () => {
@@ -39,10 +39,10 @@ describe("marender", () => {
     const two = helloEm();
 
     patch(e, one);
-    expect(e.node.innerHTML).toBe("Hello");
+    expect(e.node?.innerHTML).toBe("Hello");
 
     patch(one, two);
-    expect(e.node.innerHTML).toBe("<em>Hello</em>");
+    expect(e.node?.innerHTML).toBe("<em>Hello</em>");
   });
 
   test("el -> string", () => {
@@ -51,10 +51,10 @@ describe("marender", () => {
     const two = hello();
 
     patch(e, one);
-    expect(e.node.innerHTML).toBe("<em>Hello</em>");
+    expect(e.node?.innerHTML).toBe("<em>Hello</em>");
 
     patch(one, two);
-    expect(e.node.innerHTML).toBe("Hello");
+    expect(e.node?.innerHTML).toBe("Hello");
   });
 
   test("adding / removing deeper children", () => {
@@ -64,13 +64,13 @@ describe("marender", () => {
     const three = h("div");
 
     patch(e, one);
-    expect(e.node.children[0].children.length).toBe(0);
+    expect(e.node?.children[0].children.length).toBe(0);
 
     patch(one, two);
-    expect(e.node.children[0].children[0].children.length).toBe(0);
+    expect(e.node?.children[0].children[0].children.length).toBe(0);
 
     patch(two, three);
-    expect(e.node.children.length).toBe(0);
+    expect(e.node?.children.length).toBe(0);
   });
 
   test("deleting children", () => {
@@ -79,10 +79,10 @@ describe("marender", () => {
     const two = h("div", [h("p", ["There"])]);
 
     patch(e, one);
-    expect(e.node.children.length).toBe(2);
+    expect(e.node?.children.length).toBe(2);
 
     patch(one, two);
-    expect(e.node.innerHTML).toBe("<p>There</p>");
+    expect(e.node?.innerHTML).toBe("<p>There</p>");
   });
 
   test("null children", () => {
@@ -92,13 +92,13 @@ describe("marender", () => {
     const three = h("div", [h("p"), null]);
 
     patch(e, one);
-    expect(e.node.children.length === 0);
+    expect(e.node?.children.length === 0);
 
     patch(one, two);
-    expect(e.node.children.length === 1);
+    expect(e.node?.children.length === 1);
 
     patch(two, three);
-    expect(e.node.children.length === 1);
+    expect(e.node?.children.length === 1);
   });
 
   test("adding / deleting attributes", () => {
@@ -108,13 +108,13 @@ describe("marender", () => {
     const three = h("div", [h("div")]);
 
     patch(e, one);
-    expect(e.node.children[0].getAttribute("attr")).toBe("hello");
+    expect(e.node?.children[0].getAttribute("attr")).toBe("hello");
 
     patch(one, two);
-    expect(e.node.children[0].getAttribute("attr")).toBe("world");
+    expect(e.node?.children[0].getAttribute("attr")).toBe("world");
 
     patch(two, three);
-    expect(e.node.children[0].hasAttribute("attr")).toBe(false);
+    expect(e.node?.children[0].hasAttribute("attr")).toBe(false);
   });
 
   test("boolean attributes", () => {
@@ -124,13 +124,13 @@ describe("marender", () => {
     const three = h("div", [h("div", { attr: false })]);
 
     patch(e, one);
-    expect(e.node.children[0].hasAttribute("attr")).toBe(false);
+    expect(e.node?.children[0].hasAttribute("attr")).toBe(false);
 
     patch(one, two);
-    expect(e.node.children[0].hasAttribute("attr")).toBe(true);
+    expect(e.node?.children[0].hasAttribute("attr")).toBe(true);
 
     patch(two, three);
-    expect(e.node.children[0].hasAttribute("attr")).toBe(false);
+    expect(e.node?.children[0].hasAttribute("attr")).toBe(false);
   });
 
   test("adding / deleting event listeners", () => {
@@ -142,15 +142,15 @@ describe("marender", () => {
     const three = h("div", [h("div", {}, { click: eventListener2 })]);
 
     patch(e, one);
-    (e.node.children[0] as HTMLElement).click();
+    (e.node?.children[0] as HTMLElement).click();
     expect(eventListener1).toHaveBeenCalled();
 
     patch(one, two);
-    (e.node.children[0] as HTMLElement).click();
+    (e.node?.children[0] as HTMLElement).click();
     expect(eventListener1).toHaveBeenCalledTimes(2);
 
     patch(two, three);
-    (e.node.children[0] as HTMLElement).click();
+    (e.node?.children[0] as HTMLElement).click();
     expect(eventListener2).toHaveBeenCalled();
     expect(eventListener1).toHaveBeenCalledTimes(2);
   });
