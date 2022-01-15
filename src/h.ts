@@ -3,7 +3,6 @@
    Copyright (C) 2021 macarc
  */
 import { V, Attributes, Events } from "./types";
-import { patch } from "./vdom";
 
 type Child = V | string | null;
 
@@ -70,8 +69,4 @@ function hFrom(element: string | HTMLElement): V {
 
   return { name: el.tagName, attrs: {}, events: {}, children: [], node: el };
 }
-
-// Functions
-export { h, hFrom, patch, svg };
-// Types
-export { Attributes, Child, Events, V };
+export { Child, h, hFrom, svg };

@@ -5,11 +5,16 @@
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "scripts": {
-    "build": "esbuild src/h.ts --bundle --platform=node --outfile=build/index.js",
+    "build": "esbuild src/index.ts --bundle --platform=node --outfile=build/index.js",
     "type": "tsc",
     "fmt": "prettier --write .",
     "test": "jest"
   },
+  "files": [
+    "build"
+  ],
+  "homepage": "https://github.com/macarc/marender",
+  "bugs": "https://github.com/macarc/marender/issues",
   "author": "macarc",
   "license": "GPL-3.0",
   "devDependencies": {
