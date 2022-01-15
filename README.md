@@ -4,7 +4,7 @@ A simple and stupid virtual dom implementation. It's still quite rough around th
 
 ## API
 
-`h` and `svg` create virtual HTML elements and SVG elements respectively. They are overloaded with the following options:
+### h
 
 - `h(name: string): VElement;`
 - `h(name: string, children: Child[]): VElement;`
@@ -12,17 +12,23 @@ A simple and stupid virtual dom implementation. It's still quite rough around th
 - `h(name: string, attrs: Attributes, children: Child[]): VElement;`
 - `h(name: string, attrs: Attributes, events: Events): VElement;`
 
-To turn an empty element on the page to a virtual DOM element use `hFrom`:
+Create a virtual DOM element.
 
-`hFrom(element: string | HTMLElement): V`
+### hFrom
 
-If a string is passed, it is used as an ID.
+- `hFrom(element: string | HTMLElement): V`
 
-To update the page, use the `patch` function:
+Takes an empty HTML element, or an ID for an empty element in the document, and creates a virtual DOM element from it. A non-empty element results in undefined behaviour :)
 
-`patch(before: VElement, after: VElement)`
+### patch
 
-You an only patch elements that are the same type of element (i.e. have the same tag name).
+- `patch(before: VElement, after: VElement)`
+
+Updates the DOM. You may only patch elements that are the same type of element (i.e. have the same tag name).
+
+### svg
+
+Same api as `h`. Creates a virtual DOM SVG element.
 
 ## Example Usage
 
