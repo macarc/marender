@@ -2,6 +2,9 @@
 
 A simple and stupid virtual DOM implementation. It's still quite rough around the edges.
 
+- [Github](https://github.com/macarc/marender)
+- [NPM](https://www.npmjs.com/package/marender)
+
 ## Features
 
 - Simple - 185 loc, but all the work is done in `src/patch.ts` which is 109 loc. Public API is made of 4 functions.
