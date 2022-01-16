@@ -14,7 +14,7 @@ function unreachable(): never {
 
 // Create a new element from a virtual node
 // Uses DocumentFragment for good-ish performance
-function patchNew(v: V, topLevel = true): Element {
+function create(v: V, topLevel = true): Element {
   const newElement = v.attrs.ns
     ? document.createElementNS(v.attrs.ns.toString(), v.name)
     : document.createElement(v.name);
@@ -39,7 +39,7 @@ function patchNew(v: V, topLevel = true): Element {
       parent.appendChild(d);
       child.node = d;
     } else {
-      const d = patchNew(child, false);
+      const d = create(child, false);
       parent.appendChild(d);
     }
   }
@@ -58,7 +58,7 @@ export function patch(before: V, after: V): boolean {
     before.node === null ||
     before.name.toLowerCase() !== after.name.toLowerCase()
   ) {
-    patchNew(after);
+    create(after);
     return true;
   }
   after.node = before.node;
@@ -109,7 +109,7 @@ export function patch(before: V, after: V): boolean {
       // Child needs to be added
       if (isVElement(aft)) {
         after.node.insertBefore(
-          patchNew(aft),
+          create(aft),
           before.node.children[child] || null
         );
       } else if (isVString(aft)) {
@@ -132,7 +132,7 @@ export function patch(before: V, after: V): boolean {
         aft.node = document.createTextNode(aft.s);
         after.node.replaceChild(aft.node, oldNode);
       } else if (isVString(bef)) {
-        after.node.replaceChild(patchNew(aft), oldNode);
+        after.node.replaceChild(create(aft), oldNode);
       } else {
         unreachable();
       }
