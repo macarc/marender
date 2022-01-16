@@ -1,10 +1,10 @@
 # Macarc's Virtual DOM Render
 
-A simple and stupid virtual dom implementation. It's still quite rough around the edges.
+A simple and stupid virtual DOM implementation. It's still quite rough around the edges.
 
 ## Features
 
-- Simple - 186 loc, but all the work is done in `src/patch.ts` which is 110 loc. 4 public functions.
+- Simple - 185 loc, but all the work is done in `src/patch.ts` which is 109 loc. Public API is made of 4 functions.
 - Stupid - I have no idea how virtual DOM works! I just made it up :P It has worked just fine for [my use case](https://github.com/macarc/PipeScore)
 - No dependencies
 
@@ -13,6 +13,12 @@ A simple and stupid virtual dom implementation. It's still quite rough around th
 Editing the DOM by hand is hard if you wish to use 'functional' techniques, due to its procedural nature. The virtual DOM is a wrapper over the DOM API to provide a functional equivalent. Using a virtual DOM library, you create two JS objects that represent the old state of the page and the new state of the page, and then perform a patch. The objects can be created using 'pure' code, which is nice :)
 
 The patching algorithm simply goes through the differences and applies them to the real DOM. This is ostensibly more efficient than hand-written code since a naïve approach would delete everything and start again, and the DOM API is pretty slow, while a decent patching algorithm will skip over parts that are the same. Of course, using procedural code is the fastest, but undesirable for (most) programmers, and programmers are the people writing the code (for better or for worse).
+
+## Installation
+
+```bash
+npm install marender
+```
 
 ## API
 

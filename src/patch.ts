@@ -53,7 +53,7 @@ function create(v: V, topLevel = true): Element {
 export function patch(before: V, after: V): boolean {
   if (after === before) return false;
 
-  // If we need to replace the element entirely, delegate to patchNew
+  // If we need to replace the element entirely, delegate to create
   if (
     before.node === null ||
     before.name.toLowerCase() !== after.name.toLowerCase()
