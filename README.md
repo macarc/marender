@@ -25,6 +25,7 @@ The patching algorithm simply goes through the differences and applies them to t
 - `h(name: string, attrs: Attributes): V`
 - `h(name: string, attrs: Attributes, children: Child[]): V`
 - `h(name: string, attrs: Attributes, events: Events): V`
+- `h(name: string, attrs: Attributes, events: Events, children: Child[]): V`
 
 Create a virtual DOM element.
 
