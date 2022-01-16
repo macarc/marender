@@ -20,10 +20,8 @@ function patchNew(v: V, topLevel = true): Element {
     : document.createElement(v.name);
 
   for (const attr in v.attrs) {
-    const isFalse = typeof v.attrs[attr] === "boolean" && !v.attrs[attr];
-    if (!isFalse) {
+    if (v.attrs[attr] !== false)
       newElement.setAttribute(attr, v.attrs[attr].toString());
-    }
   }
   for (const event in v.events) {
     newElement.addEventListener(event, v.events[event]);
@@ -53,6 +51,9 @@ function patchNew(v: V, topLevel = true): Element {
 // Compares both virtual DOM and efficiently updates the real DOM (actual DOM mutation is slow)
 // Returns true if after.node !== before.node (i.e. the node needs to be replaced)
 export function patch(before: V, after: V): boolean {
+  if (after === before) return false;
+
+  // If we need to replace the element entirely, delegate to patchNew
   if (
     before.node === null ||
     before.name.toLowerCase() !== after.name.toLowerCase()
@@ -62,6 +63,7 @@ export function patch(before: V, after: V): boolean {
   }
   after.node = before.node;
 
+  // Update attributes
   for (const attr in { ...before.attrs, ...after.attrs }) {
     if (before.attrs[attr] !== after.attrs[attr]) {
       if (
@@ -75,6 +77,8 @@ export function patch(before: V, after: V): boolean {
       }
     }
   }
+
+  // Update event listeners
   for (const event in { ...before.events, ...after.events }) {
     if (before.events[event] !== after.events[event]) {
       after.node.removeEventListener(event, before.events[event]);
@@ -82,8 +86,11 @@ export function patch(before: V, after: V): boolean {
     }
   }
 
+  // Update children
+
   after.children = after.children.filter((a) => a !== null);
 
+  // If there are fewer children now, delete the extra ones
   const childrenDiffLength = before.children.length - after.children.length;
   for (let i = 0; i < childrenDiffLength; i++)
     before.node.removeChild(

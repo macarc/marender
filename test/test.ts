@@ -85,6 +85,25 @@ describe("marender", () => {
     expect(e.node?.innerHTML).toBe("<p>There</p>");
   });
 
+  test("identical children are not patched", () => {
+    const attr = jest.fn();
+    attr.mockReturnValue("foo");
+    const shared = h("div", {
+      get attr() {
+        return attr();
+      },
+    });
+    const e = el();
+    const one = h("div", ["Hi, ", shared]);
+    const two = h("div", ["Hello, ", shared]);
+
+    patch(e, one);
+    const calls = attr.mock.calls.length;
+
+    patch(one, two);
+    expect(attr).toHaveBeenCalledTimes(calls);
+  });
+
   test("null children", () => {
     const e = el();
     const one = h("div", [null]);
